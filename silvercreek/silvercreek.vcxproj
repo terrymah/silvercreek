@@ -145,12 +145,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Faces.h" />
     <ClInclude Include="LiveFrame.h" />
     <ClInclude Include="silvercreek.h" />
     <ClInclude Include="VideoSource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Faces.cpp" />
     <ClCompile Include="LiveFrame.cpp" />
     <ClCompile Include="silvercreek.cpp" />
   </ItemGroup>
