@@ -102,7 +102,28 @@ void FaceDetector::OnNewFrame(std::shared_ptr<cv::Mat> frame)
         
         // For each candidate rect/face, match them up in decending score
         for (auto& score : scores) {
-            if (!score.face->matched && (score.))
+            if (!score.face->matched && (score.rect->x != score.rect->y)) {
+                score.face->matched = true;
+                score.face->visible = true;
+                score.face->m_lastPosition = *score.rect;
+                score.rect->x = score.rect->y; // x == y will be our "matched" flag for the rect
+            }
+        }
+
+        // Set any unmatched faces to not visible
+        for (auto& face : m_faces) {
+            face->visible = false;
+        }
+
+        // Create a new face for any unmatched rect
+        for (auto& rect : faceRects) {
+            if (rect.x != rect.y) {
+                Face* f = new Face;
+                f->matched = true;
+                f->visible = true;
+                f->m_lastPosition = rect;
+                m_faces.push_back(std::unique_ptr<Face>(f));
+            }
         }
     });
 }
