@@ -15,6 +15,7 @@ public:
 
 private:
     Camera m_camera;
+    tjm::dash::SolidObject s;
     LiveFrame m_frame;
     FaceDetector m_fd;
 };
@@ -41,7 +42,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE,
 }
 
 MyApp::MyApp() :
-    m_frame(&m_camera)
+    m_frame(&m_camera),
+    s(D2D1::ColorF(D2D1::ColorF::OrangeRed))
 {
 }
 
@@ -53,6 +55,20 @@ void MyApp::InitializeApplication(tjm::dash::DashApplication * app)
     app->SetRoot(&m_frame);
 
     m_fd.SetVideoSource(&m_camera);
+
+    m_fd.NewFace += [&](Face* f) {
+        s.SetPosition(D2D1::Point2F((FLOAT)f->m_lastPosition.x, (FLOAT)f->m_lastPosition.y));
+        s.SetSize(D2D1::SizeF((FLOAT)f->m_lastPosition.width, (FLOAT)f->m_lastPosition.height));
+        s.SetVisible(true);
+
+        m_frame.AddChild(&s);
+    };
+
+    m_fd.UpdatedFace += [&](Face* f) {
+        s.SetPosition(D2D1::Point2F((FLOAT)f->m_lastPosition.x, (FLOAT)f->m_lastPosition.y));
+        s.SetSize(D2D1::SizeF((FLOAT)f->m_lastPosition.width, (FLOAT)f->m_lastPosition.height));
+        s.SetVisible(f->visible);
+    };
 }
 
 void MyApp::DestroyApplication(tjm::dash::DashApplication * /*app*/)

@@ -8,6 +8,9 @@
 const int MAX_SIZE_CHANGE = 10;
 const int MAX_DIST_CHANGE = 25;
 const int TOTAL_CHANGE = MAX_DIST_CHANGE * 2 + MAX_SIZE_CHANGE * 2;
+
+const int MIN_MOVE = 10;
+
 class Face
 {
 public:
@@ -17,6 +20,8 @@ public:
     int Score(cv::Rect& rect);
 
     cv::Rect2i m_lastPosition; // position at last match
+
+    void* context;
 };
 
 class FaceDetector
@@ -35,7 +40,8 @@ public:
 
     // Events fire from a background thread
     tjm::events::Event1<FaceDetector, Face*> NewFace;
-    tjm::events::Event1<FaceDetector, Face*> Clear;
+    tjm::events::Event1<FaceDetector, Face*> UpdatedFace;
+    tjm::events::Event0<FaceDetector> Clear;
 
 private:
     VideoSource* m_source;

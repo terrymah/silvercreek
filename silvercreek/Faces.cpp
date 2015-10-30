@@ -76,7 +76,7 @@ void FaceDetector::OnNewFrame(std::shared_ptr<cv::Mat> frame)
 
         // This currently isn't working because I need a VS2015 version of opencv!
         std::vector<cv::Rect> faceRects;
-        faceRects.reserve(10);
+        faceRects.reserve(10); // work around
         m_cs.detectMultiScale(frame_gray, faceRects, 1.1, 2, CV_HAAR_SCALE_IMAGE, cv::Size(30, 30));
         
         // Time to match
@@ -103,16 +103,22 @@ void FaceDetector::OnNewFrame(std::shared_ptr<cv::Mat> frame)
         // For each candidate rect/face, match them up in decending score
         for (auto& score : scores) {
             if (!score.face->matched && (score.rect->x != score.rect->y)) {
+                bool update = !score.face->visible || score.face->m_lastPosition != *score.rect;
                 score.face->matched = true;
                 score.face->visible = true;
                 score.face->m_lastPosition = *score.rect;
                 score.rect->x = score.rect->y; // x == y will be our "matched" flag for the rect
+                if (update)
+                    UpdatedFace.Fire(score.face);
             }
         }
 
         // Set any unmatched faces to not visible
         for (auto& face : m_faces) {
-            face->visible = false;
+            if (!face->matched && face->visible) {
+                face->visible = false;
+                UpdatedFace.Fire(face.get());
+            }
         }
 
         // Create a new face for any unmatched rect
@@ -123,6 +129,7 @@ void FaceDetector::OnNewFrame(std::shared_ptr<cv::Mat> frame)
                 f->visible = true;
                 f->m_lastPosition = rect;
                 m_faces.push_back(std::unique_ptr<Face>(f));
+                NewFace.Fire(f);
             }
         }
     });
