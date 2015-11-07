@@ -71,16 +71,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\projects\Events;E:\libraries\opencv\build\include;E:\projects\AnimatedVar\Include;E:\projects\Dash;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\libraries\opencv\build\x86\vc12\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\Events;$(SolutionDir)..\..\libraries\opencv\include;$(SolutionDir)..\AnimatedVar\Include;$(SolutionDir)..\Dash;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\..\libraries\opencv\x86\vc14\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>E:\projects\Events;E:\libraries\opencv\build\include;E:\projects\AnimatedVar\Include;E:\projects\Dash;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\libraries\opencv\build\x86\vc12\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\Events;$(SolutionDir)..\..\libraries\opencv\include;$(SolutionDir)..\AnimatedVar\Include;$(SolutionDir)..\Dash;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\..\libraries\opencv\x86\vc14\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

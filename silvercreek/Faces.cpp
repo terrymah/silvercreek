@@ -74,9 +74,7 @@ void FaceDetector::OnNewFrame(std::shared_ptr<cv::Mat> frame)
         cv::cvtColor(*frame, frame_gray, CV_BGR2GRAY);
         cv::equalizeHist(frame_gray, frame_gray);
 
-        // This currently isn't working because I need a VS2015 version of opencv!
         std::vector<cv::Rect> faceRects;
-        faceRects.reserve(10); // work around
         m_cs.detectMultiScale(frame_gray, faceRects, 1.1, 2, CV_HAAR_SCALE_IMAGE, cv::Size(30, 30));
         
         // Time to match
