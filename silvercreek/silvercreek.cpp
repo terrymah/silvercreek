@@ -56,18 +56,26 @@ void MyApp::InitializeApplication(tjm::dash::DashApplication * app)
 
     m_fd.SetVideoSource(&m_camera);
 
-    m_fd.NewFace += [&](Face* f) {
-        s.SetPosition(D2D1::Point2F((FLOAT)f->m_lastPosition.x, (FLOAT)f->m_lastPosition.y));
-        s.SetSize(D2D1::SizeF((FLOAT)f->m_lastPosition.width, (FLOAT)f->m_lastPosition.height));
-        s.SetVisible(true);
-
-        m_frame.AddChild(&s);
+    m_fd.NewFace += [=](Face* f) {
+        auto position = D2D1::Point2F((FLOAT)f->m_lastPosition.x, (FLOAT)f->m_lastPosition.y);
+        auto size = D2D1::SizeF((FLOAT)f->m_lastPosition.width, (FLOAT)f->m_lastPosition.height);
+        app->OnMainThread([=]() {
+            s.SetPosition(position);
+            s.SetSize(size);
+            s.SetVisible(true);
+            m_frame.AddChild(&s);
+        });
     };
 
-    m_fd.UpdatedFace += [&](Face* f) {
-        s.SetPosition(D2D1::Point2F((FLOAT)f->m_lastPosition.x, (FLOAT)f->m_lastPosition.y));
-        s.SetSize(D2D1::SizeF((FLOAT)f->m_lastPosition.width, (FLOAT)f->m_lastPosition.height));
-        s.SetVisible(f->visible);
+    m_fd.UpdatedFace += [=](Face* f) {
+        auto position = D2D1::Point2F((FLOAT)f->m_lastPosition.x, (FLOAT)f->m_lastPosition.y);
+        auto size = D2D1::SizeF((FLOAT)f->m_lastPosition.width, (FLOAT)f->m_lastPosition.height);
+        bool visible = f->visible;
+        app->OnMainThread([=]() {
+            s.SetPosition(position);
+            s.SetSize(size);
+            s.SetVisible(visible);
+        });
     };
 }
 
